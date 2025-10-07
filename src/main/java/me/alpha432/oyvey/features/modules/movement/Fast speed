@@ -1,0 +1,33 @@
+package me.alpha432.oyvey.features.modules.movement;
+
+import me.alpha432.oyvey.features.modules.Module;
+import me.alpha432.oyvey.features.settings.Setting;
+import net.minecraft.entity.attribute.EntityAttributes;
+
+public class Speed extends Module {
+    private final Setting<Float> speed = num("Speed", 0.3f, 0.1f, 1.0f);
+    private double prevSpeed;
+
+    public Speed() {
+        super("Speed", "Move faster than normal", Category.MOVEMENT, true, false, false);
+    }
+
+    @Override
+    public void onEnable() {
+        if (nullCheck()) return;
+        prevSpeed = mc.player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).getBaseValue();
+        mc.player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(speed.getValue());
+    }
+
+    @Override
+    public void onDisable() {
+        if (nullCheck()) return;
+        mc.player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(prevSpeed);
+    }
+
+    @Override
+    public void onUpdate() {
+        if (nullCheck()) return;
+        mc.player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(speed.getValue());
+    }
+}
